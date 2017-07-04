@@ -7,12 +7,15 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
 import com.echopen.asso.echopen.echography_image_streaming.modes.EchographyImageStreamingTCPMode;
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationContract;
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationPresenter;
 import com.echopen.asso.echopen.ui.RenderingContextController;
+import com.echopen.asso.echopen.utils.Config;
+import com.echopen.asso.echopen.utils.Timer;
 
 import static com.echopen.asso.echopen.utils.Constants.Http.REDPITAYA_IP;
 import static com.echopen.asso.echopen.utils.Constants.Http.REDPITAYA_PORT;
@@ -41,14 +44,25 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         RenderingContextController controller = new RenderingContextController();
         EchographyImageStreamingService streamingService = new EchographyImageStreamingService(controller);
         EchographyImageVisualisationPresenter presenter = new EchographyImageVisualisationPresenter(streamingService, new EchographyImageVisualisationContract.View(){
 
             @Override
-            public void refreshImage(Bitmap iBitmap){
-                Log.e("image",iBitmap.getWidth()+","+iBitmap.getHeight());
+            public void refreshImage(final Bitmap iBitmap){
+                try{
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ImageView echoImage = (ImageView) findViewById(R.id.image);
+                            echoImage.setImageBitmap(iBitmap);
+                            Log.e("image",iBitmap.getWidth()+","+iBitmap.getHeight());
+                        }
+                    });
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
             }
             @Override
             public void setPresenter(EchographyImageVisualisationContract.Presenter presenter){
@@ -56,6 +70,8 @@ public class MainActivity extends Activity {
             }
 
             });
+
+
 
         EchographyImageStreamingTCPMode mode = new EchographyImageStreamingTCPMode(REDPITAYA_IP, REDPITAYA_PORT);
         streamingService.connect(mode, this);
