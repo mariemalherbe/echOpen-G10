@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
@@ -14,8 +16,6 @@ import com.echopen.asso.echopen.echography_image_streaming.modes.EchographyImage
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationContract;
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationPresenter;
 import com.echopen.asso.echopen.ui.RenderingContextController;
-import com.echopen.asso.echopen.utils.Config;
-import com.echopen.asso.echopen.utils.Timer;
 
 import static com.echopen.asso.echopen.utils.Constants.Http.REDPITAYA_IP;
 import static com.echopen.asso.echopen.utils.Constants.Http.REDPITAYA_PORT;
@@ -45,6 +45,22 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         RenderingContextController controller = new RenderingContextController();
+
+
+        final Button buttonprobe = (Button) findViewById(R.id.buttonprobe);
+        buttonprobe.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                Intent i = new Intent(this, EchographyActivity.class);
+                startActivity(i);
+            }
+
+        });
+
+
+
+
+
         // instanciate the streaming service passing by the contextController
         EchographyImageStreamingService streamingService = new EchographyImageStreamingService(controller);
         EchographyImageVisualisationPresenter presenter = new EchographyImageVisualisationPresenter(streamingService, new EchographyImageVisualisationContract.View(){
@@ -58,6 +74,7 @@ public class MainActivity extends Activity {
                         public void run() {
                             ImageView echoImage = (ImageView) findViewById(R.id.image);
                             echoImage.setImageBitmap(iBitmap);
+
                             Log.e("image",iBitmap.getWidth()+","+iBitmap.getHeight());
                         }
                     });
@@ -102,4 +119,10 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
+
+
+
+
 }
