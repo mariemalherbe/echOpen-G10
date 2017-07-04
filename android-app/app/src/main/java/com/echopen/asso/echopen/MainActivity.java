@@ -3,22 +3,11 @@ package com.echopen.asso.echopen;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 
-import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
-import com.echopen.asso.echopen.echography_image_streaming.modes.EchographyImageStreamingTCPMode;
-import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationContract;
-import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationPresenter;
-import com.echopen.asso.echopen.ui.RenderingContextController;
-
-import static com.echopen.asso.echopen.utils.Constants.Http.REDPITAYA_IP;
-import static com.echopen.asso.echopen.utils.Constants.Http.REDPITAYA_PORT;
 
 /**
  * MainActivity class handles the main screen of the app.
@@ -44,24 +33,19 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        RenderingContextController controller = new RenderingContextController();
-
-
         final Button buttonprobe = (Button) findViewById(R.id.buttonprobe);
         buttonprobe.setOnClickListener(new View.OnClickListener() {
-
+            @Override
             public void onClick(View v) {
-                Intent i = new Intent(this, EchographyActivity.class);
-                startActivity(i);
+                startActivity(new Intent(MainActivity.this, EchographyActivity.class));
             }
-
         });
 
 
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
     }
 
@@ -73,17 +57,13 @@ public class MainActivity extends Activity {
      * See more here : https://stackoverflow.com/questions/20114485/use-onactivityresult-android
      *
      * @param requestCode, integer argument that identifies your request
-     * @param resultCode, to get its values, check RESULT_CANCELED, RESULT_OK here https://developer.android.com/reference/android/app/Activity.html#RESULT_OK
-     * @param data,       Intent instance
+     * @param resultCode,  to get its values, check RESULT_CANCELED, RESULT_OK here https://developer.android.com/reference/android/app/Activity.html#RESULT_OK
+     * @param data,        Intent instance
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-
-
-
 
 
 }
