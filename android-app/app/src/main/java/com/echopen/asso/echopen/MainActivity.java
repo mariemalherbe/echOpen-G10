@@ -45,12 +45,14 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         RenderingContextController controller = new RenderingContextController();
+        // instanciate the streaming service passing by the contextController
         EchographyImageStreamingService streamingService = new EchographyImageStreamingService(controller);
         EchographyImageVisualisationPresenter presenter = new EchographyImageVisualisationPresenter(streamingService, new EchographyImageVisualisationContract.View(){
 
             @Override
             public void refreshImage(final Bitmap iBitmap){
                 try{
+                    // on probe output refresh the image view
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -72,9 +74,10 @@ public class MainActivity extends Activity {
             });
 
 
-
+        // pass the network ip and port
         EchographyImageStreamingTCPMode mode = new EchographyImageStreamingTCPMode(REDPITAYA_IP, REDPITAYA_PORT);
         streamingService.connect(mode, this);
+        // subscribe to the observable stream
         presenter.listenEchographyImageStreaming();
 
     }
