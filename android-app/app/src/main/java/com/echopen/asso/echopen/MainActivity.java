@@ -58,45 +58,6 @@ public class MainActivity extends Activity {
         });
 
 
-
-
-
-        // instanciate the streaming service passing by the contextController
-        EchographyImageStreamingService streamingService = new EchographyImageStreamingService(controller);
-        EchographyImageVisualisationPresenter presenter = new EchographyImageVisualisationPresenter(streamingService, new EchographyImageVisualisationContract.View(){
-
-            @Override
-            public void refreshImage(final Bitmap iBitmap){
-                try{
-                    // on probe output refresh the image view
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ImageView echoImage = (ImageView) findViewById(R.id.image);
-                            echoImage.setImageBitmap(iBitmap);
-
-                            Log.e("image",iBitmap.getWidth()+","+iBitmap.getHeight());
-                        }
-                    });
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void setPresenter(EchographyImageVisualisationContract.Presenter presenter){
-                presenter.start();
-            }
-
-            });
-
-
-        // pass the network ip and port
-        EchographyImageStreamingTCPMode mode = new EchographyImageStreamingTCPMode(REDPITAYA_IP, REDPITAYA_PORT);
-        streamingService.connect(mode, this);
-        // subscribe to the observable stream
-        presenter.listenEchographyImageStreaming();
-
     }
 
     @Override
