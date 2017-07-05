@@ -125,9 +125,6 @@ public class EchographyActivity extends Activity {
         streamingService.connect(mode, this);
         // subscribe to the observable stream
         presenter.listenEchographyImageStreaming();
-        Bundle bundle = getIntent().getExtras();
-        final String TAG = "MyActivity";
-        Log.d(TAG,bundle.getString("probe"));
 
     }
 

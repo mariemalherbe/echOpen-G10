@@ -3,10 +3,22 @@ package com.echopen.asso.echopen;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
+import com.echopen.asso.echopen.echography_image_streaming.modes.EchographyImageStreamingTCPMode;
+import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationContract;
+import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationPresenter;
+import com.echopen.asso.echopen.ui.AbstractActionActivity;
+import com.echopen.asso.echopen.ui.RenderingContextController;
+import com.echopen.asso.echopen.utils.Constants;
 
 
 /**
@@ -20,7 +32,12 @@ import android.widget.Button;
  * These two methods should be refactored into one
  */
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements AbstractActionActivity, EchographyImageVisualisationContract.View {
+
+    private EchographyImageStreamingService mEchographyImageStreamingService;
+    private EchographyImageStreamingTCPMode lTCPMode = new EchographyImageStreamingTCPMode(Constants.Http.REDPITAYA_IP, Constants.Http.REDPITAYA_PORT);
+    private boolean isProbeConnected=true;
+    private ImageView activityButton;
 
     /**
      * This method calls all the UI methods and then gives hand to  UDPToBitmapDisplayer class.
@@ -32,24 +49,40 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
         final Button buttonprobe = (Button) findViewById(R.id.buttonprobe);
-
+        activityButton = (ImageView) findViewById(R.id.button);
+        //activityButton.setImageResource(R.drawable.button_active);
         buttonprobe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), EchographyActivity.class);
-                intent.putExtra("probe", "test");
                 startActivity(intent);
             }
         });
+
+        mEchographyImageStreamingService = ((EchOpenApplication) this.getApplication()).getEchographyImageStreamingService();
+        EchographyImageVisualisationContract.Presenter mEchographyImageVisualisationPresenter = new EchographyImageVisualisationPresenter(mEchographyImageStreamingService, this);
+        this.setPresenter(mEchographyImageVisualisationPresenter);
+        mEchographyImageStreamingService.connect(lTCPMode, this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mEchographyImageStreamingService.connect(lTCPMode, this);
+        toggleButton();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mEchographyImageStreamingService.disconnect();
+        toggleButton();
+    }
+    
 
     /**
      * Following the doc https://developer.android.com/intl/ko/training/basics/intents/result.html,
@@ -66,5 +99,28 @@ public class MainActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void toggleButton() {
+        isProbeConnected = !isProbeConnected;
+        if (!isProbeConnected) {
+            Log.e("probe", "active");
+            //activityButton.setImageResource(R.drawable.button_active);
+        } else {
+            //activityButton.setImageResource(R.drawable.button_iddle);
+            Log.e("probe", "inactive");
+        }
+    }
 
+    @Override
+    public void initActionController() {
+
+    }
+
+    @Override
+    public void refreshImage(final Bitmap iBitmap) {
+
+    }
+
+    @Override
+    public void setPresenter(EchographyImageVisualisationContract.Presenter presenter) {
+    }
 }

@@ -30,8 +30,11 @@ public class EchOpenApplication extends Application {
      */
     public EchographyImageStreamingService getEchographyImageStreamingService(){
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> [feature] activity button
         return mEchographyImageStreaming;
     }
 }
