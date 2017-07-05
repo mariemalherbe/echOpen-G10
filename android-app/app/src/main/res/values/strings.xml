@@ -2,6 +2,4 @@
 <resources>
    <string name="app_name">echopen</string>
     <string name="emergency_button">Start the probe in emergency</string>
-    <string name="dialog_message">Premier message</string>
-    <string name="dialog_title">Deuxieme message</string>
 </resources>

@@ -77,9 +77,13 @@ public class EchographyActivity extends Activity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(EchographyActivity.this);
-                builder.setMessage(R.string.dialog_message)
-                        .setTitle(R.string.dialog_title);
+
+                View view = getLayoutInflater().inflate(R.layout.dialog,null);
+                builder.setView(view);
+
                 AlertDialog dialog = builder.create();
+                dialog.show();
+
             }
         });
 
