@@ -8,13 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
-import com.echopen.asso.echopen.echography_image_streaming.modes.EchographyImageStreamingTCPMode;
-import com.echopen.asso.echopen.ui.RenderingContextController;
-
-import static com.echopen.asso.echopen.utils.Constants.Http.REDPITAYA_IP;
-import static com.echopen.asso.echopen.utils.Constants.Http.REDPITAYA_PORT;
-
 
 /**
  * MainActivity class handles the main screen of the app.
