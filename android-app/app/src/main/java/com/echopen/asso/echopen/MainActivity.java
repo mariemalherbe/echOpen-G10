@@ -3,22 +3,11 @@ package com.echopen.asso.echopen;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ImageView;
+import android.view.View;
+import android.widget.Button;
 
-import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
-import com.echopen.asso.echopen.echography_image_streaming.modes.EchographyImageStreamingTCPMode;
-import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationContract;
-import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationPresenter;
-import com.echopen.asso.echopen.ui.RenderingContextController;
-import com.echopen.asso.echopen.utils.Config;
-import com.echopen.asso.echopen.utils.Timer;
-
-import static com.echopen.asso.echopen.utils.Constants.Http.REDPITAYA_IP;
-import static com.echopen.asso.echopen.utils.Constants.Http.REDPITAYA_PORT;
 
 /**
  * MainActivity class handles the main screen of the app.
@@ -44,46 +33,20 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        RenderingContextController controller = new RenderingContextController();
-        // instanciate the streaming service passing by the contextController
-        EchographyImageStreamingService streamingService = new EchographyImageStreamingService(controller);
-        EchographyImageVisualisationPresenter presenter = new EchographyImageVisualisationPresenter(streamingService, new EchographyImageVisualisationContract.View(){
+        final Button buttonprobe = (Button) findViewById(R.id.buttonprobe);
 
+        buttonprobe.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void refreshImage(final Bitmap iBitmap){
-                try{
-                    // on probe output refresh the image view
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ImageView echoImage = (ImageView) findViewById(R.id.image);
-                            echoImage.setImageBitmap(iBitmap);
-                            Log.e("image",iBitmap.getWidth()+","+iBitmap.getHeight());
-                        }
-                    });
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), EchographyActivity.class);
+                intent.putExtra("probe", "test");
+                startActivity(intent);
             }
-            @Override
-            public void setPresenter(EchographyImageVisualisationContract.Presenter presenter){
-                presenter.start();
-            }
-
-            });
-
-
-        // pass the network ip and port
-        EchographyImageStreamingTCPMode mode = new EchographyImageStreamingTCPMode(REDPITAYA_IP, REDPITAYA_PORT);
-        streamingService.connect(mode, this);
-        // subscribe to the observable stream
-        presenter.listenEchographyImageStreaming();
-
+        });
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
     }
 
@@ -95,11 +58,13 @@ public class MainActivity extends Activity {
      * See more here : https://stackoverflow.com/questions/20114485/use-onactivityresult-android
      *
      * @param requestCode, integer argument that identifies your request
-     * @param resultCode, to get its values, check RESULT_CANCELED, RESULT_OK here https://developer.android.com/reference/android/app/Activity.html#RESULT_OK
-     * @param data,       Intent instance
+     * @param resultCode,  to get its values, check RESULT_CANCELED, RESULT_OK here https://developer.android.com/reference/android/app/Activity.html#RESULT_OK
+     * @param data,        Intent instance
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
 }

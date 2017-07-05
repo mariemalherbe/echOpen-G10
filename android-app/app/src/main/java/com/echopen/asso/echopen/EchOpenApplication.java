@@ -29,6 +29,9 @@ public class EchOpenApplication extends Application {
      * @return image streaming service
      */
     public EchographyImageStreamingService getEchographyImageStreamingService(){
+
+
+
         return mEchographyImageStreaming;
     }
 }

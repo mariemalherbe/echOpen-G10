@@ -1,9 +1,11 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+        <item name="colorPrimaryDark">#0072C0</item>
     </style>
 
     <style name="AppTheme" parent="AppBaseTheme">
+        <item name="colorPrimaryDark">#0072C0</item>
     </style>
 
 </resources>
