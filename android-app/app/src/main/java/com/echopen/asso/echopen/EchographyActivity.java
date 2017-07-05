@@ -2,10 +2,14 @@ package com.echopen.asso.echopen;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
@@ -13,6 +17,11 @@ import com.echopen.asso.echopen.echography_image_streaming.modes.EchographyImage
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationContract;
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationPresenter;
 import com.echopen.asso.echopen.ui.RenderingContextController;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import static com.echopen.asso.echopen.utils.Constants.Http.REDPITAYA_IP;
 import static com.echopen.asso.echopen.utils.Constants.Http.REDPITAYA_PORT;
@@ -22,11 +31,65 @@ import static com.echopen.asso.echopen.utils.Constants.Http.REDPITAYA_PORT;
  */
 public class EchographyActivity extends Activity {
 
+
+    public Bitmap takeScreenshot() {
+        View rootView = findViewById(android.R.id.content).getRootView();
+        rootView.setDrawingCacheEnabled(true);
+        return rootView.getDrawingCache();
+    }
+
+    public void saveBitmap(Bitmap bitmap) {
+        File imagePath = new File(Environment.getExternalStorageDirectory() + "/screenshot.png");
+        FileOutputStream fos;
+        try {
+            fos = new FileOutputStream(imagePath);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            Log.e("bitmap", String.valueOf(imagePath));
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            Log.e("bitmap", e.getMessage(), e);
+        } catch (IOException e) {
+            Log.e("bitmap", e.getMessage(), e);
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_echography);
+
+
+        final ImageButton buttonscreenshot = (ImageButton) findViewById(R.id.buttonscreenshot);
+        buttonscreenshot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            Bitmap bitmap = takeScreenshot();
+            saveBitmap(bitmap);
+
+            }
+        });
+
+        final ImageButton buttonmenu = (ImageButton) findViewById(R.id.buttonmenu);
+        buttonmenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(EchographyActivity.this);
+
+                View view = getLayoutInflater().inflate(R.layout.dialog,null);
+                builder.setView(view);
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+        });
+
+
+
+
         RenderingContextController controller = new RenderingContextController();
         // instanciate the streaming service passing by the contextController
         EchographyImageStreamingService streamingService = new EchographyImageStreamingService(controller);
