@@ -3,10 +3,25 @@ package com.echopen.asso.echopen;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.support.design.widget.BottomNavigationView;
+import android.widget.TextView;
+
+import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
+import com.echopen.asso.echopen.echography_image_streaming.modes.EchographyImageStreamingTCPMode;
+import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationContract;
+import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationPresenter;
+import com.echopen.asso.echopen.ui.AbstractActionActivity;
+import com.echopen.asso.echopen.utils.Constants;
 
 
 /**
@@ -20,7 +35,12 @@ import android.widget.Button;
  * These two methods should be refactored into one
  */
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity implements AbstractActionActivity, EchographyImageVisualisationContract.View {
+
+    private EchographyImageStreamingService mEchographyImageStreamingService;
+    private EchographyImageStreamingTCPMode lTCPMode = new EchographyImageStreamingTCPMode(Constants.Http.REDPITAYA_IP, Constants.Http.REDPITAYA_PORT);
+    private boolean isProbeConnected=true;
+    private ImageView activityStatusView;
 
     /**
      * This method calls all the UI methods and then gives hand to  UDPToBitmapDisplayer class.
@@ -32,22 +52,38 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
         final Button buttonprobe = (Button) findViewById(R.id.buttonprobe);
-
+        //activityStatusView = (ImageView) findViewById(R.id.activity);
+        //activityStatusView.setImageResource(R.drawable.button_active);
         buttonprobe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), EchographyActivity.class);
-                intent.putExtra("probe", "test");
                 startActivity(intent);
             }
         });
+
+        mEchographyImageStreamingService = ((EchOpenApplication) this.getApplication()).getEchographyImageStreamingService();
+        EchographyImageVisualisationContract.Presenter mEchographyImageVisualisationPresenter = new EchographyImageVisualisationPresenter(mEchographyImageStreamingService, this);
+        this.setPresenter(mEchographyImageVisualisationPresenter);
+        mEchographyImageStreamingService.connect(lTCPMode, this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mEchographyImageStreamingService.connect(lTCPMode, this);
+        toggleActivity();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mEchographyImageStreamingService.disconnect();
+        toggleActivity();
     }
 
 
@@ -66,5 +102,51 @@ public class MainActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void toggleActivity() {
+//        isProbeConnected = !isProbeConnected;
+//        if (!isProbeConnected) {
+//            Log.e("probe", "active");
+//            activityStatusView.setImageResource(R.drawable.ic_status_active);
+//        } else {
+//            activityStatusView.setImageResource(R.drawable.ic_status_active);
+//            Log.e("probe", "inactive");
+//        }
+    }
 
+    @Override
+    public void initActionController() {
+
+    }
+
+    @Override
+    public void refreshImage(final Bitmap iBitmap) {
+
+    }
+
+    @Override
+    public void setPresenter(EchographyImageVisualisationContract.Presenter presenter) {
+    }
+
+    private TextView mTextMessage;
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    mTextMessage.setText(R.string.title_home);
+                    return true;
+                case R.id.navigation_dashboard:
+                    mTextMessage.setText(R.string.title_dashboard);
+                    return true;
+                case R.id.navigation_notifications:
+                    mTextMessage.setText(R.string.title_notifications);
+                    return true;
+            }
+            return false;
+        }
+
+    };
 }
