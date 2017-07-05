@@ -6,11 +6,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.support.design.widget.BottomNavigationView;
+import android.widget.TextView;
+
 import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
 import com.echopen.asso.echopen.echography_image_streaming.modes.EchographyImageStreamingTCPMode;
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationContract;
@@ -51,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements AbstractActionAct
 
         setContentView(R.layout.activity_main);
         final Button buttonprobe = (Button) findViewById(R.id.buttonprobe);
-//        activityStatusView = (ImageView) findViewById(R.id.activity);
+        //activityStatusView = (ImageView) findViewById(R.id.activity);
         //activityStatusView.setImageResource(R.drawable.button_active);
         buttonprobe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,4 +126,27 @@ public class MainActivity extends AppCompatActivity implements AbstractActionAct
     @Override
     public void setPresenter(EchographyImageVisualisationContract.Presenter presenter) {
     }
+
+    private TextView mTextMessage;
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    mTextMessage.setText(R.string.title_home);
+                    return true;
+                case R.id.navigation_dashboard:
+                    mTextMessage.setText(R.string.title_dashboard);
+                    return true;
+                case R.id.navigation_notifications:
+                    mTextMessage.setText(R.string.title_notifications);
+                    return true;
+            }
+            return false;
+        }
+
+    };
 }
