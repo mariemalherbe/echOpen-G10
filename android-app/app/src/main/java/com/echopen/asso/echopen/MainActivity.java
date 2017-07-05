@@ -6,10 +6,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
@@ -17,7 +16,6 @@ import com.echopen.asso.echopen.echography_image_streaming.modes.EchographyImage
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationContract;
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationPresenter;
 import com.echopen.asso.echopen.ui.AbstractActionActivity;
-import com.echopen.asso.echopen.ui.RenderingContextController;
 import com.echopen.asso.echopen.utils.Constants;
 
 
@@ -32,12 +30,12 @@ import com.echopen.asso.echopen.utils.Constants;
  * These two methods should be refactored into one
  */
 
-public class MainActivity extends Activity implements AbstractActionActivity, EchographyImageVisualisationContract.View {
+public class MainActivity extends AppCompatActivity implements AbstractActionActivity, EchographyImageVisualisationContract.View {
 
     private EchographyImageStreamingService mEchographyImageStreamingService;
     private EchographyImageStreamingTCPMode lTCPMode = new EchographyImageStreamingTCPMode(Constants.Http.REDPITAYA_IP, Constants.Http.REDPITAYA_PORT);
     private boolean isProbeConnected=true;
-    private ImageView activityButton;
+    private ImageView activityStatusView;
 
     /**
      * This method calls all the UI methods and then gives hand to  UDPToBitmapDisplayer class.
@@ -53,8 +51,8 @@ public class MainActivity extends Activity implements AbstractActionActivity, Ec
 
         setContentView(R.layout.activity_main);
         final Button buttonprobe = (Button) findViewById(R.id.buttonprobe);
-        activityButton = (ImageView) findViewById(R.id.button);
-        //activityButton.setImageResource(R.drawable.button_active);
+//        activityStatusView = (ImageView) findViewById(R.id.activity);
+        //activityStatusView.setImageResource(R.drawable.button_active);
         buttonprobe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,16 +71,16 @@ public class MainActivity extends Activity implements AbstractActionActivity, Ec
     protected void onResume() {
         super.onResume();
         mEchographyImageStreamingService.connect(lTCPMode, this);
-        toggleButton();
+        toggleActivity();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mEchographyImageStreamingService.disconnect();
-        toggleButton();
+        toggleActivity();
     }
-    
+
 
     /**
      * Following the doc https://developer.android.com/intl/ko/training/basics/intents/result.html,
@@ -99,15 +97,15 @@ public class MainActivity extends Activity implements AbstractActionActivity, Ec
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void toggleButton() {
-        isProbeConnected = !isProbeConnected;
-        if (!isProbeConnected) {
-            Log.e("probe", "active");
-            //activityButton.setImageResource(R.drawable.button_active);
-        } else {
-            //activityButton.setImageResource(R.drawable.button_iddle);
-            Log.e("probe", "inactive");
-        }
+    private void toggleActivity() {
+//        isProbeConnected = !isProbeConnected;
+//        if (!isProbeConnected) {
+//            Log.e("probe", "active");
+//            activityStatusView.setImageResource(R.drawable.ic_status_active);
+//        } else {
+//            activityStatusView.setImageResource(R.drawable.ic_status_active);
+//            Log.e("probe", "inactive");
+//        }
     }
 
     @Override

@@ -7,8 +7,13 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
+<<<<<<< HEAD
         sha1="49f2061c938987c8e56679a731d74fd8448d8742">
         <dex dex="/Users/hugo/Desktop/echopen/echOpen-G10/android-app/app/build/intermediates/transforms/dex/debug/folders/1000/2/dagger-1.1.0_90d318b8543c37d6d83535af6be5742eb3712dcc/classes.dex" />
+=======
+        sha1="fe2a933f757daad2b6c7981047401acb16bebb5e">
+        <dex dex="/Users/constantinguidon/Sites/JAVA/echOpen-G10/android-app/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_60dcf4afc0cbe1d28dafb0e40457d3393b4459cc/classes.dex" />
+>>>>>>> it works
     </item>
     <item
         is-multidex="true"
