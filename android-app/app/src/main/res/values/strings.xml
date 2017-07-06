@@ -2,8 +2,10 @@
 <resources>
     <string name="app_name">echopen</string>
     <string name="main_view_toobar_title">Probe Status</string>
+    <string name="toobar_title">Probe Status</string>
     <string name="emergency_button">Start the probe in emergency</string>
-    <string name="connection_status">The probe is \n correctly connected </string>
+    <string name="connection_status_on">The probe is \n correctly connected </string>
+    <string name="connection_status_off">The probe is \n disconnected</string>
     <string name="device_status">The probe is on</string>
     <string name="title_home">Probe State</string>
     <string name="title_dashboard">New File</string>
