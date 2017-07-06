@@ -37,12 +37,12 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
 
     private EchographyImageStreamingService mEchographyImageStreamingService;
     private EchographyImageStreamingTCPMode lTCPMode = new EchographyImageStreamingTCPMode(Constants.Http.REDPITAYA_IP, Constants.Http.REDPITAYA_PORT);
-    private boolean isProbeConnected=true;
+    private boolean isProbeConnected = true;
     private ImageView activityStatusView;
 
     /**
      * This method calls all the UI methods and then gives hand to  UDPToBitmapDisplayer class.
-     * UDPToBitmapDisplayer listens to UDP data, processes them with the help of ScanConversion,
+     * UDPToBitmapDisplayer listens to UDP data, processes them with the help_activity of ScanConversion,
      * and then displays them.
      * Also, this method uses the Config singleton class that provides device-specific constants
      */
@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
     }
-
 
 
     @Override
@@ -139,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    Intent main = new Intent(getApplicationContext(),MainActivity.class);
+                    Intent main = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(main);
                     finish();
                     return true;
@@ -147,12 +146,14 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
                     mTextMessage.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
-                    Intent search = new Intent(getApplicationContext(),ClientActivity.class);
+                    Intent search = new Intent(getApplicationContext(), ClientActivity.class);
                     startActivity(search);
                     finish();
                     return true;
                 case R.id.navigation_help:
-                    mTextMessage.setText(R.string.help);
+                    Intent help = new Intent(getApplicationContext(), HelpActivity.class);
+                    startActivity(help);
+                    finish();
                     return true;
             }
             return false;
