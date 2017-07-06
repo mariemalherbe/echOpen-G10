@@ -36,7 +36,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
             android:layout_marginTop="40dp"
-            android:contentDescription="@string/connection_status"
             app:srcCompat="@drawable/battery_status" />
 
         <RelativeLayout
@@ -62,7 +61,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/home_block_height"
                 android:gravity="center"
-                android:text="@string/connection_status"
                 android:textColor="@color/black" />
 
             <ImageView

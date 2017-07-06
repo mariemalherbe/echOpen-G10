@@ -38,8 +38,9 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
 
     private EchographyImageStreamingService mEchographyImageStreamingService;
     private EchographyImageStreamingTCPMode lTCPMode = new EchographyImageStreamingTCPMode(Constants.Http.REDPITAYA_IP, Constants.Http.REDPITAYA_PORT);
-    private boolean isProbeConnected = true;
+    private boolean isProbeConnected=false;
     private ImageView activityStatusView;
+    private TextView activityStatusText;
 
     /**
      * This method calls all the UI methods and then gives hand to  UDPToBitmapDisplayer class.
@@ -56,8 +57,6 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setTitle(R.string.main_view_toobar_title);
-
-        activityStatusView = (ImageView) findViewById(R.id.connection_status);
 
         final Button buttonprobe = (Button) findViewById(R.id.buttonprobe);
         buttonprobe.setOnClickListener(new View.OnClickListener() {
@@ -76,22 +75,23 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        activityStatusView = (ImageView) findViewById(R.id.connection_status);
+        activityStatusText = (TextView) findViewById(R.id.textView2);
+        checkActivity();
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        mEchographyImageStreamingService.connect(lTCPMode, this);
-        toggleActivity();
+        checkActivity();
     }
 
 
     @Override
     protected void onPause() {
         super.onPause();
-        mEchographyImageStreamingService.disconnect();
-        toggleActivity();
+        checkActivity();
     }
 
     /**
@@ -109,12 +109,13 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void toggleActivity() {
-        isProbeConnected = !isProbeConnected;
+    private void checkActivity() {
         if (isProbeConnected) {
             activityStatusView.setImageResource(R.drawable.ic_status_active);
+            activityStatusText.setText(R.string.connection_status_on);
         } else {
             activityStatusView.setImageResource(R.drawable.ic_status_iddle);
+            activityStatusText.setText(R.string.connection_status_off);
         }
     }
 
@@ -125,7 +126,9 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    // check if the probe is active then update the view
                     isProbeConnected = iBitmap != null;
+                    checkActivity();
                 }
             });
         } catch (Exception e) {
@@ -153,7 +156,9 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
                     finish();
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                    Intent file = new Intent(getApplicationContext(), FilesActivity.class);
+                    startActivity(file);
+                    finish();
                     return true;
                 case R.id.navigation_notifications:
                     Intent search = new Intent(getApplicationContext(), ClientActivity.class);
