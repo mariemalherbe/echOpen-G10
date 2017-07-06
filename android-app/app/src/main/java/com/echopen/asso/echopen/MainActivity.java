@@ -1,13 +1,13 @@
 package com.echopen.asso.echopen;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +20,6 @@ import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStream
 import com.echopen.asso.echopen.echography_image_streaming.modes.EchographyImageStreamingTCPMode;
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationContract;
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationPresenter;
-import com.echopen.asso.echopen.ui.AbstractActionActivity;
 import com.echopen.asso.echopen.utils.Constants;
 
 
@@ -35,7 +34,7 @@ import com.echopen.asso.echopen.utils.Constants;
  * These two methods should be refactored into one
  */
 
-public class MainActivity extends AppCompatActivity implements AbstractActionActivity, EchographyImageVisualisationContract.View {
+public class MainActivity extends AppCompatActivity implements EchographyImageVisualisationContract.View {
 
     private EchographyImageStreamingService mEchographyImageStreamingService;
     private EchographyImageStreamingTCPMode lTCPMode = new EchographyImageStreamingTCPMode(Constants.Http.REDPITAYA_IP, Constants.Http.REDPITAYA_PORT);
@@ -52,12 +51,15 @@ public class MainActivity extends AppCompatActivity implements AbstractActionAct
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_main);
-        final Button buttonprobe = (Button) findViewById(R.id.buttonprobe);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setTitle(R.string.toobar_title);
+
         //activityStatusView = (ImageView) findViewById(R.id.activity);
         //activityStatusView.setImageResource(R.drawable.button_active);
+        final Button buttonprobe = (Button) findViewById(R.id.buttonprobe);
         buttonprobe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements AbstractActionAct
         mEchographyImageStreamingService.connect(lTCPMode, this);
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -79,13 +83,13 @@ public class MainActivity extends AppCompatActivity implements AbstractActionAct
         toggleActivity();
     }
 
+
     @Override
     protected void onPause() {
         super.onPause();
         mEchographyImageStreamingService.disconnect();
         toggleActivity();
     }
-
 
     /**
      * Following the doc https://developer.android.com/intl/ko/training/basics/intents/result.html,
@@ -103,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements AbstractActionAct
     }
 
     private void toggleActivity() {
-//        isProbeConnected = !isProbeConnected;
+        isProbeConnected = !isProbeConnected;
 //        if (!isProbeConnected) {
 //            Log.e("probe", "active");
 //            activityStatusView.setImageResource(R.drawable.ic_status_active);
@@ -114,11 +118,6 @@ public class MainActivity extends AppCompatActivity implements AbstractActionAct
     }
 
     @Override
-    public void initActionController() {
-
-    }
-
-    @Override
     public void refreshImage(final Bitmap iBitmap) {
 
     }
@@ -126,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements AbstractActionAct
     @Override
     public void setPresenter(EchographyImageVisualisationContract.Presenter presenter) {
     }
+
 
     private TextView mTextMessage;
 
