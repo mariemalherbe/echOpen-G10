@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">echopen</string>
+    <string name="toobar_title">title</string>
     <string name="emergency_button">Start the probe in emergency</string>
     <string name="connection_status">The probe is \n correctly connected </string>
     <string name="device_status">The probe is on</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">Probe State</string>
+    <string name="title_dashboard">New File</string>
+    <string name="title_notifications">Search</string>
+    <string name="settings">Settings</string>
 </resources>
