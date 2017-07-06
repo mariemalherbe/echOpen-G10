@@ -29,12 +29,6 @@ public class EchOpenApplication extends Application {
      * @return image streaming service
      */
     public EchographyImageStreamingService getEchographyImageStreamingService(){
-
-<<<<<<< HEAD
-
-
-=======
->>>>>>> [feature] activity button
         return mEchographyImageStreaming;
     }
 }
