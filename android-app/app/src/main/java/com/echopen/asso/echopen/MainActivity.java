@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -54,10 +55,10 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        getSupportActionBar().setTitle(R.string.toobar_title);
+        getSupportActionBar().setTitle(R.string.main_view_toobar_title);
 
-        //activityStatusView = (ImageView) findViewById(R.id.activity);
-        //activityStatusView.setImageResource(R.drawable.button_active);
+        activityStatusView = (ImageView) findViewById(R.id.connection_status);
+
         final Button buttonprobe = (Button) findViewById(R.id.buttonprobe);
         buttonprobe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,22 +111,31 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
 
     private void toggleActivity() {
         isProbeConnected = !isProbeConnected;
-//        if (!isProbeConnected) {
-//            Log.e("probe", "active");
-//            activityStatusView.setImageResource(R.drawable.ic_status_active);
-//        } else {
-//            activityStatusView.setImageResource(R.drawable.ic_status_active);
-//            Log.e("probe", "inactive");
-//        }
+        if (isProbeConnected) {
+            activityStatusView.setImageResource(R.drawable.ic_status_active);
+        } else {
+            activityStatusView.setImageResource(R.drawable.ic_status_iddle);
+        }
     }
 
     @Override
     public void refreshImage(final Bitmap iBitmap) {
-
+        try {
+            // on probe output refresh the image view
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    isProbeConnected = iBitmap != null;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void setPresenter(EchographyImageVisualisationContract.Presenter presenter) {
+        presenter.start();
     }
 
 
