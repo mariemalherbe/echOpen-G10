@@ -2,30 +2,18 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/black">
 
-    <!--<TextView-->
-        <!--android:id="@+id/mainText"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:text="@string/app_name"-->
-        <!--/>-->
-
-    <View
-        android:id="@+id/myRectangleView"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:background="@drawable/rectangle"
-        />
 
     <ImageButton
-        android:background="@color/transparent"
         android:id="@+id/buttonscreenshot"
-        android:src="@drawable/screenshot"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:elevation="10dp"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:src="@drawable/screenshot" />
 
     <ImageButton
         android:id="@+id/buttonmenu"
