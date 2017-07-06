@@ -6,14 +6,13 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.support.design.widget.BottomNavigationView;
 import android.widget.TextView;
 
 import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
@@ -72,6 +71,10 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
         EchographyImageVisualisationContract.Presenter mEchographyImageVisualisationPresenter = new EchographyImageVisualisationPresenter(mEchographyImageStreamingService, this);
         this.setPresenter(mEchographyImageVisualisationPresenter);
         mEchographyImageStreamingService.connect(lTCPMode, this);
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
     }
 
 
@@ -136,13 +139,17 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+                    Intent main = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(main);
+                    finish();
                     return true;
                 case R.id.navigation_dashboard:
                     mTextMessage.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+                    Intent search = new Intent(getApplicationContext(),ClientActivity.class);
+                    startActivity(search);
+                    finish();
                     return true;
                 case R.id.navigation_help:
                     mTextMessage.setText(R.string.help);
