@@ -8,5 +8,6 @@
     <string name="title_home">Probe State</string>
     <string name="title_dashboard">New File</string>
     <string name="title_notifications">Search</string>
+    <string name="help">Help</string>
     <string name="settings">Settings</string>
 </resources>
