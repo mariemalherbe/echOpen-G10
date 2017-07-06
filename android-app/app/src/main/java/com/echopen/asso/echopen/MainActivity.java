@@ -39,7 +39,83 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
     private EchographyImageStreamingService mEchographyImageStreamingService;
     private EchographyImageStreamingTCPMode lTCPMode = new EchographyImageStreamingTCPMode(Constants.Http.REDPITAYA_IP, Constants.Http.REDPITAYA_PORT);
     private boolean isProbeConnected=true;
+    private TextView mTextMessage;
+
     private ImageView activityStatusView;
+
+
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    mTextMessage.setText(R.string.title_home);
+                    return true;
+                case R.id.navigation_dashboard:
+                    mTextMessage.setText(R.string.title_dashboard);
+                    return true;
+                case R.id.navigation_notifications:
+                    mTextMessage.setText(R.string.title_notifications);
+                    return true;
+            }
+            return false;
+        }
+
+    };
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mEchographyImageStreamingService.connect(lTCPMode, this);
+        toggleActivity();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mEchographyImageStreamingService.disconnect();
+        toggleActivity();
+    }
+
+    /**
+     * Following the doc https://developer.android.com/intl/ko/training/basics/intents/result.html,
+     * onActivityResult is “Called when an activity you launched exits, giving you the requestCode you started it with,
+     * the resultCode it returned, and any additional data from it.”,
+     * See more here : https://stackoverflow.com/questions/20114485/use-onactivityresult-android
+     *
+     * @param requestCode, integer argument that identifies your request
+     * @param resultCode,  to get its values, check RESULT_CANCELED, RESULT_OK here https://developer.android.com/reference/android/app/Activity.html#RESULT_OK
+     * @param data,        Intent instance
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void toggleActivity() {
+        isProbeConnected = !isProbeConnected;
+        if (!isProbeConnected) {
+            Log.e("probe", "active");
+            //activityStatusView.setImageResource(R.drawable.ic_status_active);
+        } else {
+            //activityStatusView.setImageResource(R.drawable.ic_status_active);
+            Log.e("probe", "inactive");
+        }
+    }
+
+    @Override
+    public void refreshImage(final Bitmap iBitmap) {
+
+    }
+
+
+    @Override
+    public void setPresenter(EchographyImageVisualisationContract.Presenter presenter) {
+    }
 
     /**
      * This method calls all the UI methods and then gives hand to  UDPToBitmapDisplayer class.
@@ -72,81 +148,9 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
         EchographyImageVisualisationContract.Presenter mEchographyImageVisualisationPresenter = new EchographyImageVisualisationPresenter(mEchographyImageStreamingService, this);
         this.setPresenter(mEchographyImageVisualisationPresenter);
         mEchographyImageStreamingService.connect(lTCPMode, this);
+
+        //mTextMessage = (TextView) findViewById(R.id.message);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
-
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mEchographyImageStreamingService.connect(lTCPMode, this);
-        toggleActivity();
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mEchographyImageStreamingService.disconnect();
-        toggleActivity();
-    }
-
-    /**
-     * Following the doc https://developer.android.com/intl/ko/training/basics/intents/result.html,
-     * onActivityResult is “Called when an activity you launched exits, giving you the requestCode you started it with,
-     * the resultCode it returned, and any additional data from it.”,
-     * See more here : https://stackoverflow.com/questions/20114485/use-onactivityresult-android
-     *
-     * @param requestCode, integer argument that identifies your request
-     * @param resultCode,  to get its values, check RESULT_CANCELED, RESULT_OK here https://developer.android.com/reference/android/app/Activity.html#RESULT_OK
-     * @param data,        Intent instance
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void toggleActivity() {
-        isProbeConnected = !isProbeConnected;
-//        if (!isProbeConnected) {
-//            Log.e("probe", "active");
-//            activityStatusView.setImageResource(R.drawable.ic_status_active);
-//        } else {
-//            activityStatusView.setImageResource(R.drawable.ic_status_active);
-//            Log.e("probe", "inactive");
-//        }
-    }
-
-    @Override
-    public void refreshImage(final Bitmap iBitmap) {
-
-    }
-
-    @Override
-    public void setPresenter(EchographyImageVisualisationContract.Presenter presenter) {
-    }
-
-
-    private TextView mTextMessage;
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
-                    return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
-                    return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
-                    return true;
-            }
-            return false;
-        }
-
-    };
 }
