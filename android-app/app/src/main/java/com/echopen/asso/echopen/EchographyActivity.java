@@ -29,7 +29,7 @@ import static com.echopen.asso.echopen.utils.Constants.Http.REDPITAYA_PORT;
 /**
  * This class handle the displaying of the echography results
  */
-public class EchographyActivity extends Activity {
+public class EchographyActivity extends Activity implements EchographyImageVisualisationContract.View {
 
 
     public Bitmap takeScreenshot() {
@@ -47,9 +47,7 @@ public class EchographyActivity extends Activity {
             Log.e("bitmap", String.valueOf(imagePath));
             fos.flush();
             fos.close();
-        } catch (FileNotFoundException e) {
-            Log.e("bitmap", e.getMessage(), e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.e("bitmap", e.getMessage(), e);
         }
     }
@@ -66,8 +64,8 @@ public class EchographyActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-            Bitmap bitmap = takeScreenshot();
-            saveBitmap(bitmap);
+                Bitmap bitmap = takeScreenshot();
+                saveBitmap(bitmap);
 
             }
         });
@@ -78,7 +76,7 @@ public class EchographyActivity extends Activity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(EchographyActivity.this);
 
-                View view = getLayoutInflater().inflate(R.layout.dialog,null);
+                View view = getLayoutInflater().inflate(R.layout.dialog, null);
                 builder.setView(view);
 
                 AlertDialog dialog = builder.create();
@@ -87,45 +85,32 @@ public class EchographyActivity extends Activity {
             }
         });
 
-
-
-
-        RenderingContextController controller = new RenderingContextController();
+        EchographyImageStreamingService mEchographyImageStreamingService = ((EchOpenApplication) this.getApplication()).getEchographyImageStreamingService();
         // instanciate the streaming service passing by the contextController
-        EchographyImageStreamingService streamingService = new EchographyImageStreamingService(controller);
-        EchographyImageVisualisationPresenter presenter = new EchographyImageVisualisationPresenter(streamingService, new EchographyImageVisualisationContract.View() {
-
-            @Override
-            public void refreshImage(final Bitmap iBitmap) {
-                try {
-                    // on probe output refresh the image view
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ImageView echoImage = (ImageView) findViewById(R.id.image);
-                            echoImage.setImageBitmap(iBitmap);
-                            Log.e("image", iBitmap.getWidth() + "," + iBitmap.getHeight());
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void setPresenter(EchographyImageVisualisationContract.Presenter presenter) {
-                presenter.start();
-            }
-
-        });
-
-
-        // pass the network ip and port
-        EchographyImageStreamingTCPMode mode = new EchographyImageStreamingTCPMode(REDPITAYA_IP, REDPITAYA_PORT);
-        streamingService.connect(mode, this);
+        EchographyImageVisualisationContract.Presenter mEchographyImageVisualisationPresenter = new EchographyImageVisualisationPresenter(mEchographyImageStreamingService, this);
         // subscribe to the observable stream
-        presenter.listenEchographyImageStreaming();
-
+        this.setPresenter(mEchographyImageVisualisationPresenter);
     }
 
+    @Override
+    public void refreshImage(final Bitmap iBitmap) {
+        try {
+            // on probe output refresh the image view
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ImageView echoImage = (ImageView) findViewById(R.id.image);
+                    echoImage.setImageBitmap(iBitmap);
+                    Log.e("image", iBitmap.getWidth() + "," + iBitmap.getHeight());
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setPresenter(EchographyImageVisualisationContract.Presenter presenter) {
+        presenter.start();
+    }
 }
