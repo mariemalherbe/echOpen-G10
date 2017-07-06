@@ -4,13 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <View
-        android:id="@+id/myRectangleView"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:background="@drawable/rectangle"
-        />
-
     <ImageButton
         android:id="@+id/buttonscreenshot"
         android:layout_width="wrap_content"
@@ -19,7 +12,7 @@
         android:layout_height="wrap_content"
         android:background="@color/transparent"
         android:src="@drawable/screenshot" />
-    
+
     <ImageButton
         android:id="@+id/buttonmenu"
         android:background="@color/transparent"
