@@ -3,6 +3,7 @@ package com.echopen.asso.echopen;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,10 +26,11 @@ public class EchographyActivity extends Activity implements EchographyImageVisua
 
 
     public Bitmap takeScreenshot() {
-        View rootView = findViewById(android.R.id.content).getRootView();
+        View rootView = findViewById(R.id.image);
         rootView.setDrawingCacheEnabled(true);
         return rootView.getDrawingCache();
     }
+
 
     private void saveImageToGallery(Bitmap bitmap){
         ImageView imageView = (ImageView) findViewById(R.id.image);
@@ -67,7 +69,16 @@ public class EchographyActivity extends Activity implements EchographyImageVisua
             public void onClick(View v) {
                 Bitmap bitmap = takeScreenshot();
                 saveImageToGallery(bitmap);
-
+                AlertDialog alertDialog = new AlertDialog.Builder(EchographyActivity.this).create();
+                alertDialog.setTitle("Alert");
+                alertDialog.setMessage("You took a screenshot");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
             }
         });
 
