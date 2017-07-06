@@ -34,7 +34,8 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginTop="40dp"
             android:contentDescription="@string/connection_status"
             app:srcCompat="@drawable/battery_status" />
 
