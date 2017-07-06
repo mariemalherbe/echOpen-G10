@@ -38,27 +38,72 @@
             android:contentDescription="@string/connection_status"
             app:srcCompat="@drawable/battery_status" />
 
-        <TextView
-            android:id="@+id/textView2"
+        <RelativeLayout
+            android:id="@+id/probe_status_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/home_block_height"
             android:layout_marginBottom="10dp"
             android:background="@drawable/layout_bg"
-            android:gravity="center"
-            android:text="@string/connection_status"
-            android:textAlignment="center"
-            android:textColor="@color/black" />
+            android:paddingLeft="20dp"
+            android:gravity="center">
 
-        <TextView
-            android:id="@+id/textView"
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:elevation="99dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_probe_connected"
+                android:contentDescription="@string/app_name" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/home_block_height"
+                android:gravity="center"
+                android:text="@string/connection_status"
+                android:textColor="@color/black" />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/probe_connection_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/home_block_height"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="30dp"
             android:background="@drawable/layout_bg"
-            android:gravity="center"
-            android:text="@string/device_status"
-            android:textAlignment="center"
-            android:textColor="@color/black" />
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:elevation="99dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_power_settings_new_black_24px"
+                android:contentDescription="@string/app_name" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/home_block_height"
+                android:background="@drawable/layout_bg"
+                android:gravity="center"
+                android:text="@string/device_status"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:elevation="99dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_status_active"
+                android:contentDescription="@string/app_name" />
+
+        </RelativeLayout>
 
         <Button
             android:id="@+id/buttonprobe"
