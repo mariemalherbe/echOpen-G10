@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">echopen</string>
-    <string name="toobar_title">title</string>
+    <string name="main_view_toobar_title">Probe Status</string>
     <string name="emergency_button">Start the probe in emergency</string>
     <string name="connection_status">The probe is \n correctly connected </string>
     <string name="device_status">The probe is on</string>

@@ -45,6 +45,7 @@
             android:layout_height="@dimen/home_block_height"
             android:layout_marginBottom="10dp"
             android:background="@drawable/layout_bg"
+            android:paddingRight="20dp"
             android:paddingLeft="20dp"
             android:gravity="center">
 
@@ -64,6 +65,13 @@
                 android:text="@string/connection_status"
                 android:textColor="@color/black" />
 
+            <ImageView
+                android:id="@+id/connection_status"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:elevation="99dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
 
         </RelativeLayout>
 
