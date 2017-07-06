@@ -35,6 +35,12 @@
             android:name=".MainActivity"
             android:label="@string/toobar_title"/>
         <activity
+            android:name=".ClientActivity"
+            android:label="ClientActivity"/>
+        <activity
+            android:name=".ClientDetailActivity"
+            android:label="ClientDetailActivity"/>
+        <activity
             android:name=".EchographyActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
