@@ -144,6 +144,9 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
                     return true;
+                case R.id.navigation_help:
+                    mTextMessage.setText(R.string.help);
+                    return true;
             }
             return false;
         }
