@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/home_block_height"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/layout_bg"
+            android:background="@layout/layout_bg"
             android:paddingRight="20dp"
             android:paddingLeft="20dp"
             android:gravity="center">
@@ -79,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/home_block_height"
             android:layout_marginBottom="30dp"
-            android:background="@drawable/layout_bg"
+            android:background="@layout/layout_bg"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:gravity="center">
@@ -96,7 +96,7 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/home_block_height"
-                android:background="@drawable/layout_bg"
+                android:background="@layout/layout_bg"
                 android:gravity="center"
                 android:text="@string/device_status"
                 android:textColor="@color/black" />

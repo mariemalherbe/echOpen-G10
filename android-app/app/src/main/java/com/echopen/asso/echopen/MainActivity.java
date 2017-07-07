@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
 
     private EchographyImageStreamingService mEchographyImageStreamingService;
     private EchographyImageStreamingTCPMode lTCPMode = new EchographyImageStreamingTCPMode(Constants.Http.REDPITAYA_IP, Constants.Http.REDPITAYA_PORT);
-    private boolean isProbeConnected=false;
+    private boolean isProbeConnected = false;
     private ImageView activityStatusView;
     private TextView activityStatusText;
 
@@ -140,9 +139,6 @@ public class MainActivity extends AppCompatActivity implements EchographyImageVi
     public void setPresenter(EchographyImageVisualisationContract.Presenter presenter) {
         presenter.start();
     }
-
-
-    private TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {

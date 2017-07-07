@@ -3,7 +3,9 @@ package com.echopen.asso.echopen;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +18,8 @@ import android.widget.ImageView;
 import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationContract;
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationPresenter;
+import com.echopen.asso.echopen.sqlite_database.FeedReaderContract;
+import com.echopen.asso.echopen.sqlite_database.FeedReaderDbHelper;
 
 import java.util.UUID;
 
@@ -32,11 +36,11 @@ public class EchographyActivity extends Activity implements EchographyImageVisua
     }
 
 
-    private void saveImageToGallery(Bitmap bitmap){
+    private void saveImageToGallery(Bitmap bitmap) {
         ImageView imageView = (ImageView) findViewById(R.id.image);
         //bitmap = imageView.getDrawingCache();
 
-        MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "/screenshot" + UUID.randomUUID().toString() +".png", null);
+        MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "/screenshot" + UUID.randomUUID().toString() + ".png", null);
     }
 
 //    public void saveBitmap(Bitmap bitmap) {
@@ -124,5 +128,19 @@ public class EchographyActivity extends Activity implements EchographyImageVisua
     @Override
     public void setPresenter(EchographyImageVisualisationContract.Presenter presenter) {
         presenter.start();
+    }
+
+    private long savePerson() {
+        FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(getApplicationContext());
+        // Gets the data repository in write mode
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_ECHO_TYPE, "test");
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SEX, "restest");
+
+        // Insert the new row, returning the primary key value of the new row
+        return db.insert(FeedReaderContract.FeedEntry.TABLE_NAME, null, values);
     }
 }
